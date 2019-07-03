@@ -1,7 +1,8 @@
 package game;
 
-import java.util.ArrayList;
-
+/**
+ * A játékosok típusát deffiniáló ősosztály.
+ */
 public class Players {
 
     int getNumber(Row row, Choice choice) {

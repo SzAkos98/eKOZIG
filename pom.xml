@@ -5,13 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>hu.unideb.inf</groupId>
-    <artifactId>ProjectSWE</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>Project_eKOZIG</artifactId>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <developers>
         <developer>
-            <id>XMQFNS</id>
             <name>Szabó Ákos</name>
             <email>szabo.akos.98.01@gmail.com</email>
         </developer>

@@ -3,6 +3,9 @@ package game;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * A számsorozat generálása. 1000 darab elemből 1 és 9999 közötti értékekkel véletrenszerűen.
+ */
 public class GenerateRow {
 
     static Row generateNewRow ( int limit) {

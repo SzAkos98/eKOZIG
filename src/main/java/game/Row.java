@@ -2,6 +2,9 @@ package game;
 
 import java.util.ArrayList;
 
+/**
+ * A számsoroazt típusának deklarálása.
+ */
 public class Row {
     private ArrayList<Integer> row;
 

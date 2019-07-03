@@ -1,20 +1,10 @@
 package game;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventType;
-import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -23,16 +13,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class View extends Application {
 
     private static Stage window;
     private static Scene scene1,scene2;
-    private Logger logger = LoggerFactory.getLogger(View.class);
 
     /**
      * A {@link Main} osztály hívja meg, ez a program valódi {@code main} függvénye.
@@ -43,11 +28,14 @@ public class View extends Application {
         launch(args);
     }
 
-
+    /**
+     * A program grafikus felületének generálásáért felelős függvény.
+     * @param primaryStage az alap Stage.
+     */
     @Override
     public void start(Stage primaryStage) {
         window = primaryStage;
-        window.setTitle("ProjectSWE");
+        window.setTitle("Project eKOZIG");
         Rectangle bg = new Rectangle(1280, 720);
         bg.setStroke(Color.DARKCYAN);
         bg.setFill(Color.ANTIQUEWHITE);
@@ -60,6 +48,10 @@ public class View extends Application {
         window.show();
     }
 
+    /**
+     * A menü grafikus felületének létrehozása.
+     * @param menuLayout
+     */
     public void mainView(Pane menuLayout) {
 
         //background and font size fixed
@@ -67,20 +59,20 @@ public class View extends Application {
         bg.setStroke(Color.DARKCYAN);
         bg.setFill(Color.ANTIQUEWHITE);
         Font font = Font.font(72);
+        AnchorPane asd = new AnchorPane();
+        asd.getChildren().add(bg);
 
         //start button
         Button btnStart = new Button("Start");
         btnStart.setFont(font);
         btnStart.setOnAction(actionEvent -> {
-            simulateGames(1000000);
-            logger.info("Clicked Start button. Going to the Start Game scene.");
+            simulateGames(1000000, asd);
         });
 
         //exit button
         Button btnExit = new Button("Exit");
         btnExit.setFont(font);
         btnExit.setOnAction(actionEvent -> {
-            logger.info("Clicked Exit button. Exiting program.");
             System.exit(0);
         });
 
@@ -91,8 +83,7 @@ public class View extends Application {
 
         menuLayout.getChildren().add(btns);
         scene1 = new Scene(menuLayout, 600, 600);
-        AnchorPane asd = new AnchorPane();
-        asd.getChildren().add(bg);
+
 
     }
 
@@ -106,22 +97,26 @@ public class View extends Application {
 
     private static VBox list = new VBox();
 
-    private static Button startButton;
 
-    private void simulateGames(int limit) {
+    /**
+     * A teljes végeredmény grafikus megjelenítése.
+     * @param limit a szimulációk száma/hányszor fusson le a program
+     * @param pane
+     */
+    public void simulateGames(int limit, Pane pane) {
 
         //background and font size fixed
         Rectangle bg = new Rectangle(600, 600);
         bg.setStroke(Color.DARKCYAN);
         bg.setFill(Color.ANTIQUEWHITE);
-        Font font = Font.font(72);
-        Pane pane = new Pane();
-
         wins = 0;
         loses = 0;
         ties = 0;
         int timer = 10;
         startTime = System.nanoTime();
+        scene2 = new Scene(pane, 600, 600);
+        window.setScene(scene2);
+
         for (int i = 0; i < limit; i++) {
 
             EndState endState = GameLogic.simulate();
@@ -134,33 +129,23 @@ public class View extends Application {
             }
 
             if (i == timer - 1) {
-                int fxWins = wins;
-                int fxLoses = loses;
-                int fxTies = ties;
                 final int counter = i;
-                Platform.runLater(() -> {
-                    Label header = new Label("Simulation ran " + (counter + 1) + " times");
-                    Label time = new Label("Elapsed time: " + (System.nanoTime() - startTime) / 1000000 + " ms");
-                    Label stats = new Label("Stats: " + "wins: " + fxWins + " loses: " + fxLoses + " ties: " + fxTies);
-                    list.getChildren().addAll(header, time, stats);
-                    list.setAlignment(Pos.CENTER);
-                    pane.getChildren().add(list);
-                    scene2 = new Scene(pane, 600, 600);
-                    window.setScene(scene2);
-                });
+                Label header = new Label("Simulation ran " + (counter + 1) + " times");
+                System.out.println("Simulation ran " + (counter + 1) + " times");
+                Label time = new Label("Elapsed time: " + (System.nanoTime() - startTime) / 1000000 + " ms");
+                System.out.println("Elapsed time: " + (System.nanoTime() - startTime) / 1000000 + " ms");
+                Label stats = new Label("Stats: " + "wins: " + wins + " loses: " + loses + " ties: " + ties);
+                System.out.println("Stats: " + "wins: " + wins + " loses: " + loses + " ties: " + ties);
+                list.getChildren().addAll(header, time, stats);
+                if (counter +1 == 1000000) {
+                    Label end = new Label("The simulation was " + (wins / 1000000.0) * 100 + "% successful!");
+                    list.getChildren().add(end);
+                }
+                list.setAlignment(Pos.CENTER);
                 timer *= 10;
             }
         }
-        Platform.runLater(() -> {
-            startButton.disableProperty().setValue(false);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Info");
-            alert.setHeaderText("Simulation Ended!");
-            alert.setContentText("The simulation was " + (wins / 1000000.0) * 100 + "% successful!");
-
-            alert.showAndWait();
-        });
-
+        pane.getChildren().add(list);
     }
 
 }

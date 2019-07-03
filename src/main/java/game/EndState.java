@@ -1,7 +1,7 @@
 package game;
 
 /**
- * A lehetséges végeredményeket tartalmazza.
+ * A lehetséges végeredmények deffiniálása egy szimulált játékra nézve.
  */
 
 public enum EndState {

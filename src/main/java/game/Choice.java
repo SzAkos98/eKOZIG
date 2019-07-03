@@ -1,5 +1,8 @@
 package game;
 
+/**
+ * A lehetséges választások típusának és eredményének deffiniálása.
+ */
 public enum Choice {
     FIRST,
     LAST,
@@ -13,10 +16,8 @@ public enum Choice {
             return row.getRow().size() -1;
         } else if ( choice == BIGGER)  {
             return (row.getRow().get(0) > row.getRow().get(row.getRow().size() - 1)) ? 0 : row.getRow().size() -1;
-        } else if ( choice == LESS ) {
-            return (row.getRow().get(0) < row.getRow().get(row.getRow().size() - 1)) ? 0 : row.getRow().size() -1;
         } else {
-            return row.getRow().size() -1;
+            return (row.getRow().get(0) < row.getRow().get(row.getRow().size() - 1)) ? 0 : row.getRow().size() -1;
         }
     }
 }
